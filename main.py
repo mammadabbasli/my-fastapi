@@ -5,7 +5,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from sklearn.linear_model import LinearRegression
 import numpy as np
 import psycopg2
-from datetime import datetime
 
 app = FastAPI()
 
@@ -16,13 +15,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Database connection
 DB_HOST = "salary-db.c9usgw20qpyc.eu-north-1.rds.amazonaws.com"
 DB_NAME = "salarydb"
 DB_USER = "postgres"
 DB_PASS = "Yildiz25"
 
-# Create table on startup
 def init_db():
     conn = psycopg2.connect(host=DB_HOST, database=DB_NAME, user=DB_USER, password=DB_PASS)
     cur = conn.cursor()
@@ -40,24 +37,28 @@ def init_db():
 
 init_db()
 
-# Train model
 X = np.array([[1], [2], [3], [4], [5], [6], [7], [8], [9], [10]])
 y = np.array([30000, 35000, 42000, 50000, 58000, 65000, 73000, 80000, 88000, 95000])
 
 model = LinearRegression()
 model.fit(X, y)
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
 @app.get("/")
 def home():
     return FileResponse("static/index.html")
 
+@app.get("/style.css")
+def css():
+    return FileResponse("static/style.css")
+
+@app.get("/app.js")
+def js():
+    return FileResponse("static/app.js")
+
 @app.get("/predict")
 def predict(experience: float):
-    salary = model.predict([[experience]])[0]
-    salary = float(round(salary, 2))
-    # Save to database
+    salary = float(round(model.predict([[experience]])[0], 2))
+
     conn = psycopg2.connect(host=DB_HOST, database=DB_NAME, user=DB_USER, password=DB_PASS)
     cur = conn.cursor()
     cur.execute("INSERT INTO predictions (experience, predicted_salary) VALUES (%s, %s)", (experience, salary))
