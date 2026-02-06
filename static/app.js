@@ -6,7 +6,7 @@ document.getElementById('predictBtn').addEventListener('click', async function (
         return;
     }
 
-    const response = await fetch('/predict?experience=' + exp);
+    const response = await fetch('http://16.170.204.193:8000/predict?experience=' + exp);
     const data = await response.json();
 
     const result = document.getElementById('result');
