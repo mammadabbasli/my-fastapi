@@ -6,14 +6,13 @@
 
 body {
     font-family: Arial, sans-serif;
-    background: #0a0a2a;
+    background: #1a472a;
     color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
 }
-
 .card {
     background: #1a1a4a;
     padding: 40px;
@@ -53,13 +52,17 @@ input {
 button {
     width: 100%;
     padding: 12px;
-    background: #ff6600;
+    background: #e63946;
     color: white;
     border: none;
     border-radius: 8px;
     font-size: 1.1rem;
     cursor: pointer;
 }
+
+button:hover {
+    background: #c1121f;
+}}
 
 button:hover {
     background: #e65c00;
