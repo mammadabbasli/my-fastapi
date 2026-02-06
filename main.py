@@ -1,0 +1,15 @@
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+def home():
+    return {"message": "Hello from FastAPI on AWS! 🚀"}
+
+@app.get("/health")
+def health():
+    return {"status": "healthy"}
+
+@app.get("/users/{user_id}")
+def get_user(user_id: int):
+    return {"user_id": user_id, "name": f"User {user_id}"}
