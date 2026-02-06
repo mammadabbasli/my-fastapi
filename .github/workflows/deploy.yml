@@ -1,4 +1,4 @@
-name: Deploy FastAPI to EC2
+name: Deploy Docker to EC2
 
 on:
   push:
@@ -22,6 +22,7 @@ jobs:
           script: |
             cd ~/my-api
             git pull origin main
-            pip3 install -r requirements.txt
-            pkill uvicorn || true
-            nohup uvicorn main:app --host 0.0.0.0 --port 8000 &
+            docker stop salary-app || true
+            docker rm salary-app || true
+            docker build -t salary-predictor .
+            docker run -d -p 8000:8000 --name salary-app salary-predictor
